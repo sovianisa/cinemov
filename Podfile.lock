@@ -1,0 +1,31 @@
+PODS:
+  - Alamofire (4.7.1)
+  - AlamofireImage (3.3.1):
+    - Alamofire (~> 4.5)
+  - GCDKit (2.1.0)
+  - SimpleAlert (3.0.0)
+  - SwiftHEXColors (1.1.1)
+  - SwiftSpinner (1.5.0)
+  - SwiftyJSON (4.0.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - AlamofireImage
+  - GCDKit
+  - SimpleAlert
+  - SwiftHEXColors
+  - SwiftSpinner
+  - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
+  AlamofireImage: 3b35b586853abaf94ca1250f4e94cff3c21a4c0d
+  GCDKit: 321b439175c22e31fffb58dfc20078bf58ba4c60
+  SimpleAlert: 7265c3006749c680627545b61ac37d9ab1ab0be6
+  SwiftHEXColors: 9681e756dc78a99ae97f277165b3f5e33b087553
+  SwiftSpinner: 4c058c7a1d6b444dd2e1d70988ead40783097133
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+
+PODFILE CHECKSUM: 6d7092622b9dbedb36ab6412f916a048c571576d
+
+COCOAPODS: 1.4.0
