@@ -14,15 +14,13 @@ import GCDKit
 
 class MovieListViewController: UIViewController,UICollectionViewDataSource, UICollectionViewDelegate, NetworkManagerDelegate  {
     
-    
-    
     // MARK: @IBOutlet
     
     @IBOutlet weak var movieListCollectionView: UICollectionView!
     
     // MARK: Variables
     
-    var movies: [Dictionary<String, String>] = []
+    var movies: [Movies] = []
     var networkManager = NetworkManager()
     var pageShowing : Int = 0
     
@@ -112,7 +110,7 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
                     if let overview = result["overview"].string {
                         if let release_date = result["release_date"].string {
                             if let movie_id = Utilities.transformFromJSON(result["id"]){
-                                let movie = ["title" : title, "poster_path":poster, "id" : movie_id, "release_date" : release_date, "overview" : overview]
+                                let movie = Movies.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
                                 movies.append(movie)
                                 index = index + 1
                             }
@@ -143,7 +141,7 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
         
         let movie = movies[indexPath.row]
         
-        if let urlPoster = movie["poster_path"]  {
+        if let urlPoster = movie.poster  {
             cell.showImage(urlPoster: urlPoster)
         }
         
@@ -155,9 +153,7 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc : MovieDetailViewController = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
         let cell  = movieListCollectionView.cellForItem(at: indexPath) as! MovieListCollectionViewCell
-        
-        let movie = movies[indexPath.row]
-        vc.movie = movie
+        vc.movie =  movies[indexPath.row]
         vc.moviePoster = cell.posterImageView.image
         
         self.navigationController?.pushViewController(vc,animated: true )
@@ -175,4 +171,5 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
     
     
 }
+
 

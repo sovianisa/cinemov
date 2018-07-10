@@ -18,8 +18,8 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var posterImageView: UIImageView!
     
     // MARK: Variables
-    var movie : Dictionary<String, String> = [:]
-    var similarMovies: [Dictionary<String, String>] = []
+    var movie : Movies!
+    var similarMovies: [Movies] = []
     var pageShowing : Int = 0
     
     var moviePoster : UIImage!
@@ -43,7 +43,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
     func setNavigationBar(){
         navigationController?.navigationBar.barTintColor = Utilities.navigationColor()
         navigationController?.navigationBar.tintColor = .white
-        navigationItem.title = movie["title"]
+        navigationItem.title = movie.title
         
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         
@@ -83,7 +83,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         GCDQueue.default.async {
-            if let movie_id = self.movie["id"] {
+            if let movie_id = self.movie.movie_id {
                 self.networkManager.getSimilarMovies(movieID:movie_id, page: pageShowing)
             }
             }.notify(.main) {
@@ -112,7 +112,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
                     if let overview = result["overview"].string {
                         if let release_date = result["release_date"].string {
                             if let movie_id = Utilities.transformFromJSON(result["id"]){
-                                let movie = ["title" : title, "poster_path":poster, "id" : movie_id, "release_date" : release_date, "overview" : overview]
+                                let movie = Movies.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
                                 similarMovies.append(movie)
                                 index = index + 1
                             }
@@ -122,7 +122,6 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
             }
             
             if (index == results.count-1) {
-                print("wow :\(similarMovies.count)")
                 pageShowing = pageShowing + 1
                 
                 similarCollectionView.delegate = self
@@ -146,11 +145,11 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         if (indexPath.row == 0) {
             let cell  = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCell", for: indexPath) as! TitleTableViewCell
-            if let title = movie["title"]{
+            if let title = movie.title{
                 cell.setTitle(title: title)
             }
             
-            if let releaseDate = movie["release_date"]{
+            if let releaseDate = movie.releaseDate{
                 cell.setReleaseDate(releaseDate: releaseDate)
             }
             cell.selectionStyle = .none
@@ -158,7 +157,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
             
         } else if (indexPath.row == 1) {
             let cell  = tableView.dequeueReusableCell(withIdentifier: "DescriptionTableViewCell", for: indexPath) as! DescriptionTableViewCell
-            if let description = movie["overview"]{
+            if let description = movie.overView{
                 cell.setDescription(description: description)
             }
             cell.selectionStyle = .none
@@ -188,7 +187,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
         let cell  = similarCollectionView.dequeueReusableCell(withReuseIdentifier: "SimilarCollectionViewCell", for: indexPath) as! SimilarCollectionViewCell
         
         let movie = similarMovies[indexPath.row]
-        if let urlPoster = movie["poster_path"]  {
+        if let urlPoster = movie.poster  {
             cell.showImage(urlPoster: urlPoster)
         }
         
@@ -197,22 +196,17 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func collectionView(_ similarCollectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc : MovieDetailViewController = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as! MovieDetailViewController
         let cell  = similarCollectionView.cellForItem(at: indexPath) as! SimilarCollectionViewCell
-        
-        let movie = similarMovies[indexPath.row]
-        vc.movie = movie
+        vc.movie = similarMovies[indexPath.row]
         vc.moviePoster = cell.posterImageView.image
         
         self.navigationController?.pushViewController(vc,animated: true )
-        
-        
     }
     
-    
 }
+
 
 
 

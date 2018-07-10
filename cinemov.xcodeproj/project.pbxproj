@@ -25,6 +25,7 @@
 		A753A36220F53927000F6401 /* SimilarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A753A36120F53927000F6401 /* SimilarTableViewCell.swift */; };
 		A753A36420F5393B000F6401 /* SimilarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A753A36320F5393B000F6401 /* SimilarCollectionViewCell.swift */; };
 		A753A36620F557E3000F6401 /* SimilarMovieFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A753A36520F557E3000F6401 /* SimilarMovieFlowLayout.swift */; };
+		A753A36820F55F8D000F6401 /* Movies.swift in Sources */ = {isa = PBXBuildFile; fileRef = A753A36720F55F8D000F6401 /* Movies.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		A753A36120F53927000F6401 /* SimilarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarTableViewCell.swift; sourceTree = "<group>"; };
 		A753A36320F5393B000F6401 /* SimilarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarCollectionViewCell.swift; sourceTree = "<group>"; };
 		A753A36520F557E3000F6401 /* SimilarMovieFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMovieFlowLayout.swift; sourceTree = "<group>"; };
+		A753A36720F55F8D000F6401 /* Movies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movies.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				A753A32720F4EDCD000F6401 /* Assets.xcassets */,
 				A753A32920F4EDCD000F6401 /* LaunchScreen.storyboard */,
 				A753A32C20F4EDCD000F6401 /* Info.plist */,
+				A753A36720F55F8D000F6401 /* Movies.swift */,
 			);
 			path = cinemov;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				A753A35220F4F187000F6401 /* MovieListCollectionViewCell.swift in Sources */,
 				A753A35C20F538DB000F6401 /* MovieDetailViewController.swift in Sources */,
 				A753A35720F4FD55000F6401 /* Utilities.swift in Sources */,
+				A753A36820F55F8D000F6401 /* Movies.swift in Sources */,
 				A753A36020F53915000F6401 /* DescriptionTableViewCell.swift in Sources */,
 				A753A32120F4EDC9000F6401 /* AppDelegate.swift in Sources */,
 			);
