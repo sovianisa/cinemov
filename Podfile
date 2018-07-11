@@ -10,4 +10,15 @@ target 'cinemov' do
   pod 'Alamofire'
   pod 'AlamofireImage'
   pod 'SwiftSpinner'
+  
+  target 'cinemovTests' do
+      inherit! :search_paths
+      pod 'Quick'
+      pod 'Nimble'
+      pod 'Mockingjay'
+  end
+  
 end
+
+
+
