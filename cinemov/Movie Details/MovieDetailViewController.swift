@@ -18,8 +18,8 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var posterImageView: UIImageView!
     
     // MARK: Variables
-    var movie : Movies!
-    var similarMovies: [Movies] = []
+    var movie : Movie!
+    var similarMovies: [Movie] = []
     var pageShowing : Int = 0
     
     var moviePoster : UIImage!
@@ -33,10 +33,6 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
         setNavigationBar()
         setElements()
         refreshList()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
     // MARK: Local Functions
@@ -57,6 +53,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         movieDetailTableView.reloadData()
     }
+    
     // MARK: Networking
     
     func refreshList() {
@@ -112,7 +109,7 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
                     if let overview = result["overview"].string {
                         if let release_date = result["release_date"].string {
                             if let movie_id = Utilities.transformFromJSON(result["id"]){
-                                let movie = Movies.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
+                                let movie = Movie.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
                                 similarMovies.append(movie)
                                 index = index + 1
                             }

@@ -20,7 +20,7 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
     
     // MARK: Variables
     
-    var movies: [Movies] = []
+    var movies: [Movie] = []
     var networkManager = NetworkManager()
     var pageShowing : Int = 0
     
@@ -32,10 +32,6 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
         setElements()
         refreshList()
         
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
     // MARK: Local Functions
@@ -110,7 +106,7 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
                     if let overview = result["overview"].string {
                         if let release_date = result["release_date"].string {
                             if let movie_id = Utilities.transformFromJSON(result["id"]){
-                                let movie = Movies.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
+                                let movie = Movie.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
                                 movies.append(movie)
                                 index = index + 1
                             }

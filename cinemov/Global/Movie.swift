@@ -1,5 +1,5 @@
 //
-//  Movies.swift
+//  Movie.swift
 //  cinemov
 //
 //  Created by Annisa Sofia Noviantina on 11/07/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Movies: NSObject {
+class Movie: NSObject {
     var movie_id : String!
     var poster : String!
     var title : String!
