@@ -12,23 +12,57 @@ import SwiftyJSON
 
 @testable import cinemov
 
-class NetworkManagerSpec: QuickSpec, NetworkManagerDelegate {
-    
-    var results:JSON = [];
+class NetworkManagerSpec: QuickSpec {
     
     override func spec() {
         super.spec()
         
-        describe("Delegate testing") {
-            context("getMovieList") {
-                it("can be tested with toEventually") {
+        describe("test getMovieList") {
+            context("movie list should has 20 movies") {
+                it("success") {
+                    
                     let networkManager = NetworkManager()
-                    networkManager.delegate = self;
-                    networkManager.getMovieList(page: 1)
-                    expect(networkManager.delegate?.movieListReceived!(data: nil, error: nil)).toEventuallyNot(beNil());
+                    networkManager.getMovieList(page:1) { error, json in
+                        if error != nil {
+                            print("Error: \(error as Optional)")
+                        }
+                        
+                        guard let json = json else {
+                            print("something wrong with the json")
+                            return
+                        }
+                        
+                        let results = json["results"]
+                        expect(results.count).to(equal(20))
+                    }
                 }
             }
         }
+        
+        describe("test getSimilarMovies") {
+            context("similar movie list should has 17 movies") {
+                it("success") {
+                    
+                    let networkManager = NetworkManager()
+                    networkManager.getSimilarMovies(movieID:"351286", page:1) { error, json in
+                        if error != nil {
+                            print("Error: \(error as Optional)")
+                        }
+                        
+                        guard let json = json else {
+                            print("something wrong with the json")
+                            return
+                        }
+                        
+                        let results = json["results"]
+                        expect(results.count).to(equal(17))
+                    }
+                }
+            }
+        }
+        
+        
     }
-    
 }
+
+

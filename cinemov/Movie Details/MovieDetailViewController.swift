@@ -11,7 +11,7 @@ import SwiftyJSON
 import SwiftSpinner
 import GCDKit
 
-class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, NetworkManagerDelegate  {
+class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: @IBOutlet
     @IBOutlet weak var movieDetailTableView: UITableView!
@@ -66,7 +66,6 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
     func loadSimilarList(pageShowing:Int){
         
         if pageShowing == 1 {
-            networkManager.delegate = self
             SwiftSpinner.show("Wow good choice...")
             
             if (similarMovies.count > 0) {
@@ -81,54 +80,57 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         GCDQueue.default.async {
             if let movie_id = self.movie.movie_id {
-                self.networkManager.getSimilarMovies(movieID:movie_id, page: pageShowing)
+                self.getSimilarMovies(movieID:movie_id, page: pageShowing)
             }
             }.notify(.main) {
                 
         }
     }
     
-    func similarListReceived(data: Any?, error: NSError?) {
-        SwiftSpinner.hide()
-        if error != nil {
-            print("Error: \(error as Optional)")
-        }
+    func getSimilarMovies(movieID:String, page:Int) {
         
-        guard let data = data else {
-            print("Error: No data")
-            return
-        }
-        
-        let json = JSON(data)
-        let results = json["results"]
-        
-        var index = 0
-        for result in results.arrayValue {
-            if let poster = result["poster_path"].string {
-                if let title = result["title"].string {
-                    if let overview = result["overview"].string {
-                        if let release_date = result["release_date"].string {
-                            if let movie_id = Utilities.transformFromJSON(result["id"]){
-                                let movie = Movie.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
-                                similarMovies.append(movie)
-                                index = index + 1
+        networkManager.getSimilarMovies(movieID:movieID, page:page) { error, json in
+            SwiftSpinner.hide()
+            
+            if error != nil {
+                print("Error: \(error as Optional)")
+            }
+            
+            guard let json = json else {
+                print("something wrong with the json")
+                return
+            }
+            
+            let results = json["results"]
+            
+            var index = 0
+            for result in results.arrayValue {
+                if let poster = result["poster_path"].string {
+                    if let title = result["title"].string {
+                        if let overview = result["overview"].string {
+                            if let release_date = result["release_date"].string {
+                                if let movie_id = Utilities.transformFromJSON(result["id"]){
+                                    let movie = Movie.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
+                                    self.similarMovies.append(movie)
+                                    index = index + 1
+                                }
                             }
                         }
                     }
                 }
+                
+                if (index == results.count-1) {
+                    self.pageShowing = self.pageShowing + 1
+                    
+                    self.similarCollectionView.delegate = self
+                    self.similarCollectionView.dataSource = self
+                    
+                    self.similarCollectionView.reloadData()
+                    self.movieDetailTableView.reloadData()
+                    
+                }
+                
             }
-            
-            if (index == results.count-1) {
-                pageShowing = pageShowing + 1
-                
-                similarCollectionView.delegate = self
-                similarCollectionView.dataSource = self
-                
-                similarCollectionView.reloadData()
-                movieDetailTableView.reloadData()
-                
-            }
-            
         }
     }
     
@@ -203,6 +205,8 @@ class MovieDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
 }
+
+
 
 
 

@@ -21,5 +21,7 @@ class MovieDetailViewControllerSpec: QuickSpec {
                 _ = vc.view
             }
         }
+        
     }
 }
+

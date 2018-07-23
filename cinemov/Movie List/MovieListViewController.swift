@@ -12,7 +12,7 @@ import SwiftSpinner
 import GCDKit
 
 
-class MovieListViewController: UIViewController,UICollectionViewDataSource, UICollectionViewDelegate, NetworkManagerDelegate  {
+class MovieListViewController: UIViewController,UICollectionViewDataSource, UICollectionViewDelegate  {
     
     // MARK: @IBOutlet
     
@@ -65,7 +65,6 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
     func loadMovieList(pageShowing:Int){
         
         if pageShowing == 1 {
-            networkManager.delegate = self
             SwiftSpinner.show("It's comming...")
             
             if (movies.count > 0) {
@@ -79,52 +78,55 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
         }
         
         GCDQueue.default.async {
-            self.networkManager.getMovieList(page: pageShowing)
+            self.getMovieList(page: pageShowing)
             }.notify(.main) {
                 
         }
     }
     
-    func movieListReceived(data: Any?, error: NSError?) {
-        SwiftSpinner.hide()
-        if error != nil {
-            print("Error: \(error as Optional)")
-        }
+    func getMovieList(page:Int){
         
-        guard let data = data else {
-            print("Error: No data")
-            return
-        }
-        
-        let json = JSON(data)
-        let results = json["results"]
-        
-        var index = 0
-        for result in results.arrayValue {
-            if let poster = result["poster_path"].string {
-                if let title = result["title"].string {
-                    if let overview = result["overview"].string {
-                        if let release_date = result["release_date"].string {
-                            if let movie_id = Utilities.transformFromJSON(result["id"]){
-                                let movie = Movie.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
-                                movies.append(movie)
-                                index = index + 1
+        networkManager.getMovieList(page:page) { error, json in
+            SwiftSpinner.hide()
+            if error != nil {
+                print("Error: \(error as Optional)")
+            }
+            
+            guard let json = json else {
+                print("something wrong with the json")
+                return
+            }
+            
+            let results = json["results"]
+            var index = 0
+            for result in results.arrayValue {
+                
+                if let poster = result["poster_path"].string {
+                    if let title = result["title"].string {
+                        if let overview = result["overview"].string {
+                            if let release_date = result["release_date"].string {
+                                if let movie_id = Utilities.transformFromJSON(result["id"]){
+                                    let movie = Movie.init(movie_id: movie_id, poster: poster, title: title, overView: overview, releaseDate: release_date)
+                                    self.movies.append(movie)
+                                    index = index + 1
+                                }
                             }
                         }
                     }
                 }
+                
+                if (index == results.count-1) {
+                    self.pageShowing = self.pageShowing + 1
+                    self.movieListCollectionView.reloadData()
+                    
+                }
             }
             
-            if (index == results.count-1) {
-                pageShowing = pageShowing + 1
-                movieListCollectionView.reloadData()
-                
-            }
+            
             
         }
         
     }
-    
     
     // MARK: CollectionView Functions
     
@@ -163,9 +165,8 @@ class MovieListViewController: UIViewController,UICollectionViewDataSource, UICo
         }
         
     }
-    
-    
-    
 }
+
+
 
 

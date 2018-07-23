@@ -70,9 +70,7 @@
                             <constraint firstAttribute="trailing" secondItem="dXp-Xf-UOp" secondAttribute="trailing" id="kNa-c5-gie"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Ygr-uv-a0Z">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="aFU-sh-Mje"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="Ygr-uv-a0Z"/>
                     <connections>
                         <outlet property="movieListCollectionView" destination="dXp-Xf-UOp" id="GKY-u4-0S3"/>
                     </connections>
